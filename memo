@@ -1,0 +1,14 @@
+bundle init
+vim Gemfile
+bundle install --path bundle
+bundle exec knife solo init .
+bundle init
+vim Gemfile
+bundle install --path bundle
+Chefリポジトリ作成
+bundle exec knife solo init .
+vagrant ssh-config --host chef >> ~/.ssh/config
+Chefのインストール、knife-solo用のRsyncの設定などの実行Chefリポジトリ作成
+bundle exec knife solo prepare chef
+bundle exec knife cookbook create httpd -o site-cookbooks
+bundle exec knife solo cook chef -o httpd
