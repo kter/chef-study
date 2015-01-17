@@ -34,3 +34,63 @@ end
 vim node/chef.json
 実行するレシピを指定したのでoオプションは不要になる
 bundle exec knife solo cook chef
+httpdのリソースを追加
+````
+package "httpd" do
+  action :install
+end
+
+service "httpd" do
+  action [ :enable, :start ]
+end
+
+template "httpd.conf" do
+  path "etc/httpd/httpd.conf"
+  owner "root"
+  group "root"
+  mode 0644
+
+  notifies :reload, "service[httpd]"
+end
+````
+templateリソースで使用するファイルを追加
+mkdir -p  site-cookbooks/httpd/templates/default
+vim site-cookbooks/httpd/templates/default/httpd.conf.erb
+````
+ServerRoot "/etc/httpd"
+Listen <%= node['httpd']['port'] %>
+User apache
+Group apache
+ServerAdmin root@localhost
+ErrorLog "logs/error_log"
+TypesConfig /etc/mime.types
+Include conf.modules.d/*.conf
+DocumentRoot "/var/www/html"
+
+<Directory "/var/www/html">
+  Require all granted
+</Directory>
+
+IncludeOptional conf.d/*.conf
+
+````
+templateリソースで使用するNodeオブジェクトのAtributeを追加
+````
+{
+  "httpd": {
+    "port": 80
+  },
+  "run_list": [
+    "recipe[base_packages]",
+    "recipe[httpd]"
+  ],
+  "automatic": {
+    "ipaddress": "chef"
+  }
+}
+````
+ゲストOSのApacheにブラウザからアクセスできるようにHost-Onlyネットワークを有効にする
+vim Vagrantfile
+````
+config.vm.network "private_network", ip: "192.168.39.254"
+````
