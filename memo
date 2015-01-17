@@ -10,5 +10,27 @@ bundle exec knife solo init .
 vagrant ssh-config --host chef >> ~/.ssh/config
 Chefのインストール、knife-solo用のRsyncの設定などの実行Chefリポジトリ作成
 bundle exec knife solo prepare chef
+レシピ作成1
 bundle exec knife cookbook create httpd -o site-cookbooks
+site-cookbooks/httpd/recipes/default.rb
+````
+package "httpd" do
+  action :install
+end
+````
+レシピ実行
 bundle exec knife solo cook chef -o httpd
+レシピ作成2
+bundle exec knife cookbook create base_packages -o site-cookbooks
+site-cookbooks/base_packages/recipes/default.rb
+````
+%w{gcc make git readline readline-devel}.each do |pkg|
+  package pkg do
+    action :install
+  end
+end
+````
+実行するレシピ指定
+vim node/chef.json
+実行するレシピを指定したのでoオプションは不要になる
+bundle exec knife solo cook chef
