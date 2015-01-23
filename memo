@@ -94,3 +94,13 @@ vim Vagrantfile
 ````
 config.vm.network "private_network", ip: "192.168.39.254"
 ````
+
+serverspecを使えるようにする
+````
+vim Gemfile
+require "serverspec"
+require "rake"
+bundle install --path bundle
+bundle exec serverspec-init
+bundle exec rake spec
+````
