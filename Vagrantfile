@@ -10,8 +10,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # please see the online documentation at vagrantup.com.
 
   # Every Vagrant virtual environment requires a box to build off of.
-  config.vm.box = "centos66-plain-4.3.20"
-  config.vm.box_url = "http://blog.kter.jp/box/centos66-plain-4.3.20.box"
+  config.vm.box = "dummy"
+  config.vm.box_url = "https://github.com/mitchellh/vagrant-aws/raw/master/dummy.box"
 
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
@@ -25,7 +25,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # Create a private network, which allows host-only access to the machine
   # using a specific IP.
-  config.vm.network "private_network", ip: "192.168.39.254"
 
   # Create a public network, which generally matched to bridged network.
   # Bridged networks make the machine appear as another physical device on
@@ -53,6 +52,22 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   #   # Use VBoxManage to customize the VM. For example to change memory:
   #   vb.customize ["modifyvm", :id, "--memory", "1024"]
   # end
+
+  config.vm.provider :aws do |aws, override|
+    aws.access_key_id = ENV['AWS_ACCESS_KEY_ID']
+    aws.secret_access_key = ENV['AWS_SECRET_ACCESS_KEY']
+
+    aws.instance_type = "t2.micro"
+    aws.region = "ap-northeast-1"
+    aws.ami = 'ami-4985b048'
+    aws.user_data = "#!/bin/sh\nsed -i 's/^.*requiretty/#Defaults requiretty/' /etc/sudoers\n"
+    aws.subnet_id = 'subnet-a6d91fd1'
+    aws.security_groups = ['sg-0edf016b']
+    aws.elastic_ip = true
+    override.ssh.username = "ec2-user"
+    aws.keypair_name = "vagrant-aws"
+    override.ssh.private_key_path  = "~/.ssh/vagrant-aws"
+  end
   #
   # View the documentation for the provider you're using for more
   # information on available options.
