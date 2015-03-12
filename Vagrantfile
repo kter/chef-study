@@ -54,8 +54,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # end
 
   config.vm.provider :aws do |aws, override|
-    aws.access_key_id = ENV['AWS_ACCESS_KEY_ID']
-    aws.secret_access_key = ENV['AWS_SECRET_ACCESS_KEY']
+    aws.access_key_id = config.user.aws.access_key
+    aws.secret_access_key = config.user.aws.secret_key
 
     aws.instance_type = "t2.micro"
     aws.region = "ap-northeast-1"
