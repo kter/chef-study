@@ -4,7 +4,8 @@
   },
   "run_list": [
     "recipe[base_packages]",
-    "recipe[httpd]"
+    "recipe[httpd]",
+    "recipe[basic-installation]"
   ],
   "automatic": {
     "ipaddress": "chef"
