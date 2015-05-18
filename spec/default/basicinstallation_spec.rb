@@ -24,3 +24,11 @@ end
     it { should be_installed }
   end
 end
+
+describe file('/home/kter/.vimrc') do
+    it { should be_file }
+end
+
+describe file('/home/kter/.zshrc.local') do
+    it { should be_file }
+end
