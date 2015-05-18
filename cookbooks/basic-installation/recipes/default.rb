@@ -21,9 +21,26 @@ end
 
 user "kter" do
   gid "kter"
+  uid "1000"
   home "/home/kter"
   shell "/bin/zsh"
   system true
   action :create
+  notifies :sync, "git[/home/kter/settings]"
 end
 
+git "/home/kter/settings" do
+  repository "https://github.com/kter/settings.git"
+  user "kter"
+  group "kter"
+  action :nothing
+  notifies :run, "execute[init]"
+end
+
+execute "init" do
+  cwd "/home/kter/settings"
+  command <<-EOF
+  ./init.sh
+  EOF
+  action :nothing
+end
