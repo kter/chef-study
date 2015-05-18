@@ -10,8 +10,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # please see the online documentation at vagrantup.com.
 
   # Every Vagrant virtual environment requires a box to build off of.
-  config.vm.box = "dummy"
-  config.vm.box_url = "https://github.com/mitchellh/vagrant-aws/raw/master/dummy.box"
+  config.vm.box = "centos66-plain-4.3.26"
+  config.vm.box_url = "https://s3-ap-northeast-1.amazonaws.com/jp.kter.box/centos66-plain-4.3.26.box"
 
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
@@ -53,21 +53,21 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   #   vb.customize ["modifyvm", :id, "--memory", "1024"]
   # end
 
-  config.vm.provider :aws do |aws, override|
-    aws.access_key_id = config.user.aws.access_key
-    aws.secret_access_key = config.user.aws.secret_key
-
-    aws.instance_type = "t2.micro"
-    aws.region = "ap-northeast-1"
-    aws.ami = 'ami-4985b048'
-    aws.user_data = "#!/bin/sh\nsed -i 's/^.*requiretty/#Defaults requiretty/' /etc/sudoers\n"
-    aws.subnet_id = 'subnet-a6d91fd1'
-    aws.security_groups = ['sg-0edf016b']
-    aws.elastic_ip = true
-    override.ssh.username = "ec2-user"
-    aws.keypair_name = "vagrant-aws"
-    override.ssh.private_key_path  = "~/.ssh/vagrant-aws"
-  end
+#  config.vm.provider :aws do |aws, override|
+#    aws.access_key_id = config.user.aws.access_key
+#    aws.secret_access_key = config.user.aws.secret_key
+#
+#    aws.instance_type = "t2.micro"
+#    aws.region = "ap-northeast-1"
+#    aws.ami = 'ami-4985b048'
+#    aws.user_data = "#!/bin/sh\nsed -i 's/^.*requiretty/#Defaults requiretty/' /etc/sudoers\n"
+#    aws.subnet_id = 'subnet-a6d91fd1'
+#    aws.security_groups = ['sg-0edf016b']
+#    aws.elastic_ip = true
+#    override.ssh.username = "ec2-user"
+#    aws.keypair_name = "vagrant-aws"
+#    override.ssh.private_key_path  = "~/.ssh/vagrant-aws"
+#  end
   #
   # View the documentation for the provider you're using for more
   # information on available options.
